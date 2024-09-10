@@ -21,10 +21,9 @@ def load_existing_data(worksheet_name):
         st.error(traceback.format_exc())
         return pd.DataFrame()
 
-
 # Interface do usuário
 st.sidebar.image("https://aborgesdoamaral.pt/wp-content/uploads/2021/04/marca-de-75-anos.png", use_column_width=True)
-pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
+pagina_selecionada = st.sidebar.radio("Selecione a página", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
 
 try:
     dados = conn.read(worksheet="Dados", usecols=["Pin", "Nome"], ttl=5)
@@ -52,7 +51,6 @@ if pagina_selecionada == "✍🏽Marcação de Ponto":
 
                 for button_text, button_name in [
                     ("☕ Entrada Manhã", "Entrada Manhã")
-
                 ]:
                     if st.button(button_text):
                         try:
@@ -74,6 +72,6 @@ if pagina_selecionada == "✍🏽Marcação de Ponto":
             st.error(traceback.format_exc())
 
 try:
-    entered_password = str(int(st.sidebar.text_input("", type="password")))
+    entered_password = str(int(st.sidebar.text_input("Senha de Administrador", type="password", help="Digite a senha de administrador")))
 except ValueError:
     st.sidebar.warning("Senha deve conter apenas números")
