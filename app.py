@@ -11,7 +11,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 df = conn.read(
     worksheet="Folha",
     ttl="0m",
-    usecols=[0, 2]
+    usecols=[0,1,2]
 )
 
 df = df.dropna(how='all').reset_index(drop=True)
