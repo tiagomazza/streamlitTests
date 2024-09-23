@@ -9,7 +9,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 # Lê os dados existentes
 df = conn.read(
     worksheet="Folha",
-    ttl="10m",
+    ttl="0m",
     usecols=[0, 1],
     nrows=3,
 )
