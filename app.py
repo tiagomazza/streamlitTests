@@ -61,7 +61,7 @@ if str(pin_digitado):
 
                             # Criar nova linha com nome, botão e hora
                             new_data = pd.DataFrame({
-                                "Name": ["nome"],
+                                "Name": [nome],
                                 "Button": ["Entrada Manhã"],
                                 "SubmissionDateTime": [submission_datetime]
                             })
