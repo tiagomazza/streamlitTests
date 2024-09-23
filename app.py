@@ -11,6 +11,7 @@ df = conn.read(
     worksheet="Folha",
     ttl="0m",
     usecols=[0, 1],
+    nrows=30,
 )
 
 # Cria um formulário para adicionar novos dados
