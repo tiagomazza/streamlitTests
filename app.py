@@ -3,6 +3,17 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta
+
+def fill_missing_data(data_frame):
+    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
+    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
+    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
+    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
+    
+    for index, row in data_frame.iterrows():
+        if pd.isnull(row['Entrada Manhã']):
+            data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
 
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
@@ -48,7 +59,7 @@ if st.button("☕ Entrada Manhã"):
 
                 # Criar nova linha com nome, botão e hora
                 new_data = pd.DataFrame({
-                    "Name": [nome],
+                    "Name": ["nome"],
                     "Button": ["Entrada Manhã"],
                     "SubmissionDateTime": [submission_datetime]
                 })
