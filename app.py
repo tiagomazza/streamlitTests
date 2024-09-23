@@ -11,7 +11,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 df = conn.read(
     worksheet="Folha",
     ttl="0m",
-    usecols=[0, 1]
+    usecols=[0, 2]
 )
 
 df = df.dropna(how='all').reset_index(drop=True)
@@ -19,6 +19,7 @@ df = df.dropna(how='all').reset_index(drop=True)
 with st.form("add_data"):
     new_name = st.text_input("Nome")
     new_button = st.text_input("Botão")
+    new_date = st.text_input("data")
     submitted = st.form_submit_button("Adicionar")
 
     if submitted:
@@ -27,7 +28,7 @@ with st.form("add_data"):
         if pd.isna(first_empty_index):
             first_empty_index = len(df)
         
-        new_data = pd.DataFrame({"Name": [new_name], "Button": [new_button]})
+        new_data = pd.DataFrame({"Name": [new_name], "Button": [new_button], "SubmissionDateTime":[new_date]})
         
         df.loc[first_empty_index] = new_data.iloc[0]
     
