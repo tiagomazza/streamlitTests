@@ -38,3 +38,37 @@ with st.form("add_data"):
 
 
 
+st.title ="submissão"
+
+if st.button("☕ Entrada Manhã"):
+                # Obter a hora atual
+                current_time = datetime.now()
+                one_hour_after = current_time + timedelta(hours=1)
+                submission_datetime = one_hour_after.strftime("%Y-%m-%d %H:%M:%S")
+
+                # Criar nova linha com nome, botão e hora
+                new_data = pd.DataFrame({
+                    "Name": [nome],
+                    "Button": ["Entrada Manhã"],
+                    "SubmissionDateTime": [submission_datetime]
+                })
+
+                # Carregar dados existentes
+                existing_data_reservations = conn.read(worksheet="Folha")
+                
+                # Remover linhas completamente vazias e resetar o índice
+                existing_data_reservations = existing_data_reservations.dropna(how='all').reset_index(drop=True)
+
+                # Encontrar o primeiro índice vazio
+                first_empty_index = existing_data_reservations.index[existing_data_reservations.isnull().all(axis=1)].min()
+                
+                if pd.isna(first_empty_index):
+                    first_empty_index = len(existing_data_reservations)
+
+                # Adicionar nova linha no primeiro índice vazio
+                existing_data_reservations.loc[first_empty_index] = new_data.iloc[0]
+
+                # Atualizar a planilha com os novos dados
+                conn.update(worksheet="Folha", data=existing_data_reservations)
+
+                st.success("Dados registrados com sucesso!")
