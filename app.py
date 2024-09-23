@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
+pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto"])
+
 def fill_missing_data(data_frame):
     default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
     default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
@@ -34,24 +36,24 @@ df = df.dropna(how='all').reset_index(drop=True)
 pin_digitado = st.text_input("Digite o seu PIN:")
 
 # Verificar se o PIN foi digitado
-if str(pin_digitado):
-    # Ler os dados da aba "Dados" para encontrar o nome correspondente ao PIN inserido
-    dados = conn.read(worksheet="Dados", usecols=["Pin", "Nome"], ttl=5)
+# Determinar qual página exibir com base na seleção do usuário
 
-     
-    # Verificar se o PIN está na lista de PINs válidos
-    try:
-        pin_int = int(float(pin_digitado))
-        if pin_int in dados["Pin"].tolist():
-            nome = dados.loc[dados["Pin"] == pin_int, "Nome"].iloc[0]
-            
-            # Dar as boas-vindas utilizando o nome correspondente
-            st.write(f"😀 Bem-vindo, {nome}!")
+if pagina_selecionada == "✍🏽Marcação de Ponto":
+    st.title("✍🏽Marcação de Ponto")
 
-            # Adicionar espaço entre a mensagem de boas-vindas e os botões
-            st.write("")
+    # Adicionar campo de PIN
+    pin_digitado = st.text_input("Digite o seu PIN:")
 
-
+    # Verificar se o PIN foi digitado
+    if str(pin_digitado):
+        # Ler os dados da aba "Dados" para encontrar o nome correspondente ao PIN inserido
+        dados = conn.read(worksheet="Dados", usecols=["Pin", "Nome"], ttl=5)
+               
+        # Verificar se o PIN está na lista de PINs válidos
+        try:
+            pin_int = int(float(pin_digitado))
+            if pin_int in dados["Pin"].tolist():
+                nome = dados.loc[dados["Pin"] == pin_int, "Nome"].iloc[0]
 
             if st.button("☕ Entrada Manhã"):
                             # Obter a hora atual
@@ -95,7 +97,7 @@ if str(pin_digitado):
 
                         # Criar nova linha com nome, botão e hora
                         new_data = pd.DataFrame({
-                            "Name": ["nome"],
+                            "Name": [nome],
                             "Button": ["Saída Manhã"],
                             "SubmissionDateTime": [submission_datetime]
                         })
@@ -128,7 +130,7 @@ if str(pin_digitado):
 
                         # Criar nova linha com nome, botão e hora
                         new_data = pd.DataFrame({
-                            "Name": ["nome"],
+                            "Name": [nome],
                             "Button": ["Entrada Tarde"],
                             "SubmissionDateTime": [submission_datetime]
                         })
@@ -161,7 +163,7 @@ if str(pin_digitado):
 
                         # Criar nova linha com nome, botão e hora
                         new_data = pd.DataFrame({
-                            "Name": ["nome"],
+                            "Name": [nome],
                             "Button": ["Saída Tarde"],
                             "SubmissionDateTime": [submission_datetime]
                         })
@@ -185,7 +187,10 @@ if str(pin_digitado):
                         conn.update(worksheet="Folha", data=existing_data_reservations)
 
                         st.success("Dados registrados com sucesso!")
-    except: pass                       
+            else:
+                st.warning("Pin incorreto.")
+        except ValueError:
+            st.warning("Utilize somente numeros")                     
 
 """
 with st.form("add_data"):
