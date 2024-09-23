@@ -28,7 +28,7 @@ df = conn.read(
 df = df.dropna(how='all').reset_index(drop=True)
 
 
-st.title("✍🏽Marcação de Ponto")
+
 
 # Adicionar campo de PIN
 pin_digitado = st.text_input("Digite o seu PIN:")
