@@ -49,7 +49,29 @@ with st.form("add_data"):
 
 
 
-st.title ="submissão"
+st.title("✍🏽Marcação de Ponto")
+
+# Adicionar campo de PIN
+pin_digitado = st.text_input("Digite o seu PIN:")
+
+# Verificar se o PIN foi digitado
+if str(pin_digitado):
+    # Ler os dados da aba "Dados" para encontrar o nome correspondente ao PIN inserido
+    dados = conn.read(worksheet="Dados", usecols=["Pin", "Nome"], ttl=5)
+            
+    # Verificar se o PIN está na lista de PINs válidos
+    try:
+        pin_int = int(float(pin_digitado))
+        if pin_int in dados["Pin"].tolist():
+            nome = dados.loc[dados["Pin"] == pin_int, "Nome"].iloc[0]
+            
+            # Dar as boas-vindas utilizando o nome correspondente
+            st.write(f"😀 Bem-vindo, {nome}!")
+
+            # Adicionar espaço entre a mensagem de boas-vindas e os botões
+            st.write("")
+    except: pass
+
 
 if st.button("☕ Entrada Manhã"):
                 # Obter a hora atual
