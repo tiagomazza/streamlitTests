@@ -5,7 +5,20 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
-pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto"])
+st.markdown(
+    """
+    <style>
+    /* Altera a cor de fundo e a cor do texto do campo de entrada */
+    .stTextInput>div>div>input {
+        background-color: #ffcccb; /* Cor de fundo desejada */
+        color: #000000; /* Cor do texto desejada */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+#pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto"])
 
 def fill_missing_data(data_frame):
     default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
@@ -29,6 +42,44 @@ df = conn.read(
 
 df = df.dropna(how='all').reset_index(drop=True)
 
+def load_existing_data(worksheet_name):
+    existing_data = conn.read(worksheet=worksheet_name, ttl=5)
+    return existing_data.dropna(how="all")
+
+def fill_missing_data(data_frame):
+    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
+    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
+    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
+    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
+
+
+def save_to_new_sheet(df, sheet_name="exportado"):
+    try:
+        # Verifica se a aba já existe
+        try:
+            existing_data = conn.read(worksheet=sheet_name, ttl=5)
+        except Exception:
+            existing_data = None
+        
+        # Se não existir, cria a aba
+        if existing_data is None:
+            conn.create(worksheet=sheet_name)
+
+        # Converte DataFrame para dicionário
+        df_dict = df.to_dict(orient="records")
+        print("DataFrame convertido para dicionário:", df_dict)  # Adicionado para depuração
+
+        # Atualiza a aba com os dados
+        conn.update(worksheet=sheet_name, data=df_dict)
+        print("Dados atualizados na nova aba.")  # Adicionado para depuração
+
+        st.success(f"Dados salvos na aba '{sheet_name}' com sucesso.")
+    except Exception as e:
+        st.error(f"Erro ao salvar dados na aba '{sheet_name}': {e}")
+st.sidebar.image("https://aborgesdoamaral.pt/wp-content/uploads/2021/04/marca-de-75-anos.png", use_column_width=True)  # 
+
+pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
+
 if pagina_selecionada == "✍🏽Marcação de Ponto":
     st.title("✍🏽Marcação de Ponto")
 
@@ -51,7 +102,7 @@ if pagina_selecionada == "✍🏽Marcação de Ponto":
 
                 # Adicionar espaço entre a mensagem de boas-vindas e os botões
                 st.write("")
-                
+
                 if st.button("☕ Entrada Manhã"):
                                 # Obter a hora atual
                                 current_time = datetime.now()
