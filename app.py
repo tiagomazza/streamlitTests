@@ -32,7 +32,7 @@ def fill_missing_data(data_frame):
 
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
-""""
+"""
 # Lê os dados existentes
 df = conn.read(
     worksheet="Folha",
