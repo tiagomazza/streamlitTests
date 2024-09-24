@@ -29,15 +29,6 @@ df = conn.read(
 
 df = df.dropna(how='all').reset_index(drop=True)
 
-
-
-
-# Adicionar campo de PIN
-#pin_digitado = st.text_input("Digite o seu PIN:", key="pin_input_1")
-
-# Verificar se o PIN foi digitado
-# Determinar qual página exibir com base na seleção do usuário
-
 if pagina_selecionada == "✍🏽Marcação de Ponto":
     st.title("✍🏽Marcação de Ponto")
 
