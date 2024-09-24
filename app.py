@@ -80,6 +80,20 @@ st.sidebar.image("https://aborgesdoamaral.pt/wp-content/uploads/2021/04/marca-de
 
 pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
 
+
+dados = conn.read(worksheet="Dados", usecols=["Pin", "Nome"], ttl=5)
+
+admin_row = dados.loc[dados["Nome"] == "Admin"]
+if not admin_row.empty:
+    senha_admin =  str(int(admin_row["Pin"].iloc[0]))
+else:
+    senha_admin = None
+
+
+# Carregar dados existentes
+existing_data_reservations = load_existing_data("Folha")
+
+# Determinar qual página exibir com base na seleção do usuário
 if pagina_selecionada == "✍🏽Marcação de Ponto":
     st.title("✍🏽Marcação de Ponto")
 
