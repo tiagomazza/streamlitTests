@@ -244,8 +244,7 @@ try:
             'Saída Tarde': 'first'
         }).reset_index()
 
-        # Preencher dados faltantes com os horários padrão
-        #fill_missing_data(grouped_data)
+        fill_missing_data(grouped_data)
 
         grouped_data['Total trabalhado'] = np.nan
         for index, row in grouped_data.iterrows():
