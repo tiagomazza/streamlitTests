@@ -252,17 +252,13 @@ try:
                 total_trabalhado = (row['Saída Manhã'] - row['Entrada Manhã']) + (row['Saída Tarde'] - row['Entrada Tarde'])
                 grouped_data.at[index, 'Total trabalhado'] = total_trabalhado
 
-        # Converter o total trabalhado para horas e minutos
         grouped_data['Total trabalhado'] = grouped_data['Total trabalhado'].apply(lambda x: x.total_seconds() / 3600 if pd.notnull(x) else 0)
         grouped_data['Total trabalhado'] = grouped_data['Total trabalhado'].apply(lambda x: '{:02.0f}:{:02.0f}'.format(*divmod(x * 60, 60)))
-
-        # Converter as colunas de entrada e saída para o formato hh:mm
         grouped_data['Entrada Manhã'] = grouped_data['Entrada Manhã'].dt.strftime("%H:%M")
         grouped_data['Saída Manhã'] = grouped_data['Saída Manhã'].dt.strftime("%H:%M")
         grouped_data['Entrada Tarde'] = grouped_data['Entrada Tarde'].dt.strftime("%H:%M")
         grouped_data['Saída Tarde'] = grouped_data['Saída Tarde'].dt.strftime("%H:%M")
 
-        # Exibir o DataFrame agrupado na página
         st.write(grouped_data)
 
         sheet_name = st.text_input("Digite o nome da nova aba:", "Nova_aba")
@@ -275,15 +271,12 @@ try:
       
         st.title("🔐Restrito")
 
-        # Filtrar por nome
         nomes = existing_data_reservations["Name"].unique()
         filtro_nome = st.selectbox("Filtrar por Nome", ["Todos"] + list(nomes))
 
-        # Filtrar por data
         data_inicio = st.date_input("Data de Início")
         data_fim = st.date_input("Data de Fim")
 
-        # Filtrar os dados
         filtered_data = existing_data_reservations.copy()
 
         if filtro_nome != "Todos":
@@ -295,9 +288,8 @@ try:
             filtered_data["SubmissionDateTime"] = pd.to_datetime(filtered_data["SubmissionDateTime"])
             filtered_data = filtered_data[(filtered_data["SubmissionDateTime"] >= data_inicio) & (filtered_data["SubmissionDateTime"] <= data_fim)]
 
-        # Criar DataFrame com os dados filtrados
         data = {
-            'Data': filtered_data['SubmissionDateTime'].dt.strftime("%d/%m"),  # Formatando para dd/mm
+            'Data': filtered_data['SubmissionDateTime'].dt.strftime("%d/%m"),  
             'Nome': filtered_data['Name'],
             'Entrada Manhã': np.where(filtered_data['Button'] == 'Entrada Manhã', filtered_data['SubmissionDateTime'].dt.strftime("%H:%M"), pd.NaT),
             'Saída Manhã': np.where(filtered_data['Button'] == 'Saída Manhã', filtered_data['SubmissionDateTime'].dt.strftime("%H:%M"), pd.NaT),
@@ -312,10 +304,8 @@ try:
         df['Entrada Tarde'] = pd.to_datetime(df['Entrada Tarde'])
         df['Saída Tarde'] = pd.to_datetime(df['Saída Tarde'])
 
-        # Preencher dados faltantes com os horários padrão
         fill_missing_data(df)
 
-        # Agrupar por data e nome para calcular o total trabalhado por dia
         grouped_data = df.groupby(['Data', 'Nome']).agg({
             'Entrada Manhã': 'first',
             'Saída Manhã': 'first',
@@ -323,24 +313,20 @@ try:
             'Saída Tarde': 'first'
         }).reset_index()
 
-        # Calcular o total trabalhado por dia
         grouped_data['Total trabalhado'] = np.nan
         for index, row in grouped_data.iterrows():
             if not (pd.isnull(row['Entrada Manhã']) or pd.isnull(row['Saída Manhã']) or pd.isnull(row['Entrada Tarde']) or pd.isnull(row['Saída Tarde'])):
                 total_trabalhado = (row['Saída Manhã'] - row['Entrada Manhã']) + (row['Saída Tarde'] - row['Entrada Tarde'])
                 grouped_data.at[index, 'Total trabalhado'] = total_trabalhado
 
-        # Converter o total trabalhado para horas e minutos
         grouped_data['Total trabalhado'] = grouped_data['Total trabalhado'].apply(lambda x: x.total_seconds() / 3600 if pd.notnull(x) else 0)
         grouped_data['Total trabalhado'] = grouped_data['Total trabalhado'].apply(lambda x: '{:02.0f}:{:02.0f}'.format(*divmod(x * 60, 60)))
 
-        # Converter as colunas de entrada e saída para o formato hh:mm
         grouped_data['Entrada Manhã'] = grouped_data['Entrada Manhã'].dt.strftime("%H:%M")
         grouped_data['Saída Manhã'] = grouped_data['Saída Manhã'].dt.strftime("%H:%M")
         grouped_data['Entrada Tarde'] = grouped_data['Entrada Tarde'].dt.strftime("%H:%M")
         grouped_data['Saída Tarde'] = grouped_data['Saída Tarde'].dt.strftime("%H:%M")
 
-        # Exibir o DataFrame agrupado na página
         st.write(grouped_data)
 
         sheet_name = st.text_input("Digite o nome da nova aba:", "Nova_aba")
@@ -352,6 +338,5 @@ try:
 
         
 except ValueError:
-    # Handle invalid input (not an integer)
     print("Invalid password format. Please enter a valid integer.")
     pass
