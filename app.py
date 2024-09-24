@@ -52,7 +52,7 @@ def fill_missing_data(data_frame):
     default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
     default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
 
-
+"""
 def save_to_new_sheet(df, sheet_name="exportado"):
     try:
         # Verifica se a aba já existe
@@ -77,7 +77,7 @@ def save_to_new_sheet(df, sheet_name="exportado"):
     except Exception as e:
         st.error(f"Erro ao salvar dados na aba '{sheet_name}': {e}")
 st.sidebar.image("https://aborgesdoamaral.pt/wp-content/uploads/2021/04/marca-de-75-anos.png", use_column_width=True)  # 
-"""
+
 pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
 
 if pagina_selecionada == "✍🏽Marcação de Ponto":
