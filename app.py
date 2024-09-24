@@ -52,10 +52,10 @@ def save_to_new_sheet(df):
         if existing_data is None:
             conn.create(worksheet=sheet_name)
 
-     #   df_dict = df.to_dict(orient="records")
-     #   print("DataFrame convertido para dicionário:", df_dict)  
+        df_dict = df.to_dict(orient="records")
+        print("DataFrame convertido para dicionário:", df_dict)  
 
-        conn.update(worksheet=sheet_name, data=df)
+        conn.update(worksheet=sheet_name, data=df_dict)
         print("Dados atualizados na nova aba.")  
 
         st.success(f"Dados salvos na aba '{sheet_name}' com sucesso.")
@@ -80,7 +80,7 @@ existing_data_reservations = load_existing_data("Folha")
 if pagina_selecionada == "✍🏽Marcação de Ponto":
     st.title("✍🏽Marcação de Ponto")
 
-    pin_digitado = st.text_input("Digite o seu PIN:")
+    pin_digitado = st.text_input("Digite o seu PIN:",type="password")
 
     if str(pin_digitado):
         dados = conn.read(worksheet="Dados", usecols=["Pin", "Nome"], ttl=5)
