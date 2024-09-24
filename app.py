@@ -244,7 +244,7 @@ try:
             'Saída Tarde': 'first'
         }).reset_index()
 
-        fill_missing_data(grouped_data)
+        #fill_missing_data(grouped_data)
 
         grouped_data['Total trabalhado'] = np.nan
         for index, row in grouped_data.iterrows():
