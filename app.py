@@ -29,6 +29,13 @@ def fill_missing_data(data_frame):
     for index, row in data_frame.iterrows():
         if pd.isnull(row['Entrada Manhã']):
             data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
+        if pd.isnull(row['Saída Manhã']):
+            data_frame.at[index, 'Saída Manhã'] = default_entry_morning
+        if pd.isnull(row['Entrada Tarde']):
+            data_frame.at[index, 'Entrada Tarde'] = default_entry_morning
+        if pd.isnull(row['Saída Tarde']):
+            data_frame.at[index, 'Saída Tarde'] = default_entry_morning
+            
 
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
@@ -36,13 +43,6 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
-
-#def fill_missing_data(data_frame):
-#    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
-#    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
-#    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
-#    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
-
 
 def save_to_new_sheet(df, sheet_name="exportado"):
     try:
