@@ -46,6 +46,12 @@ if pagina_selecionada == "✍🏽Marcação de Ponto":
             if pin_int in dados["Pin"].tolist():
                 nome = dados.loc[dados["Pin"] == pin_int, "Nome"].iloc[0]
 
+                # Dar as boas-vindas utilizando o nome correspondente
+                st.write(f"😀 Bem-vindo, {nome}!")
+
+                # Adicionar espaço entre a mensagem de boas-vindas e os botões
+                st.write("")
+                
                 if st.button("☕ Entrada Manhã"):
                                 # Obter a hora atual
                                 current_time = datetime.now()
