@@ -28,10 +28,13 @@ def fill_missing_data(data_frame):
     for index, row in data_frame.iterrows():
         if pd.isnull(row['Entrada Manhã']):
             data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
+    for index, row in data_frame.iterrows():
         if pd.isnull(row['Saída Manhã']):
             data_frame.at[index, 'Saída Manhã'] = default_exit_morning
+    for index, row in data_frame.iterrows():
         if pd.isnull(row['Entrada Tarde']):
             data_frame.at[index, 'Entrada Tarde'] = default_entry_afternoon
+    for index, row in data_frame.iterrows():
         if pd.isnull(row['Saída Tarde']):
             data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
          
@@ -238,7 +241,6 @@ try:
             'Saída Tarde': 'first'
         }).reset_index()
 
-        #fill_missing_data(grouped_data)
 
         grouped_data['Total trabalhado'] = np.nan
         for index, row in grouped_data.iterrows():
