@@ -37,11 +37,11 @@ def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
 
-def fill_missing_data(data_frame):
-    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
-    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
-    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
-    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
+#def fill_missing_data(data_frame):
+#    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
+#    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
+#    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
+#    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
 
 
 def save_to_new_sheet(df, sheet_name="exportado"):
