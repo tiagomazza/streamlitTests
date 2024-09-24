@@ -41,7 +41,7 @@ df = conn.read(
 )
 
 df = df.dropna(how='all').reset_index(drop=True)
-
+"""
 def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
@@ -52,7 +52,7 @@ def fill_missing_data(data_frame):
     default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
     default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
 
-"""
+#teste
 def save_to_new_sheet(df, sheet_name="exportado"):
     try:
         # Verifica se a aba já existe
