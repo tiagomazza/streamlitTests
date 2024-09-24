@@ -32,7 +32,7 @@ def fill_missing_data(data_frame):
 
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
-
+""""
 # Lê os dados existentes
 df = conn.read(
     worksheet="Folha",
@@ -52,7 +52,7 @@ def fill_missing_data(data_frame):
     default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
     default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
 
-""""
+
 def save_to_new_sheet(df, sheet_name="exportado"):
     try:
         # Verifica se a aba já existe
