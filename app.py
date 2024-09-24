@@ -18,7 +18,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-#pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto"])
 
 def fill_missing_data(data_frame):
     default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
@@ -37,30 +36,25 @@ def fill_missing_data(data_frame):
             data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
          
 
-# Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
 
-def save_to_new_sheet(df, sheet_name="exportado"):
+def save_to_new_sheet(df, sheet_name):
     try:
-        # Verifica se a aba já existe
         try:
             existing_data = conn.read(worksheet=sheet_name, ttl=5)
         except Exception:
             existing_data = None
         
-        # Se não existir, cria a aba
         if existing_data is None:
             conn.create(worksheet=sheet_name)
 
-        # Converte DataFrame para dicionário
         df_dict = df.to_dict(orient="records")
         print("DataFrame convertido para dicionário:", df_dict)  
 
-        # Atualiza a aba com os dados
         conn.update(worksheet=sheet_name, data=df_dict)
         print("Dados atualizados na nova aba.")  
 
