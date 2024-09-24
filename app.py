@@ -29,13 +29,14 @@ def fill_missing_data(data_frame):
     for index, row in data_frame.iterrows():
         if pd.isnull(row['Entrada Manhã']):
             data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
+        """
         if pd.isnull(row['Saída Manhã']):
             data_frame.at[index, 'Saída Manhã'] = default_exit_morning
         if pd.isnull(row['Entrada Tarde']):
             data_frame.at[index, 'Entrada Tarde'] = default_entry_afternoon
         if pd.isnull(row['Saída Tarde']):
             data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
-            
+            """
 
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
