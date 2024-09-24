@@ -42,27 +42,25 @@ def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
 
-def save_to_new_sheet(conn, df, sheet_name):
+def save_to_new_sheet(df):
     try:
-        # Check if the worksheet exists
         try:
             existing_data = conn.read(worksheet=sheet_name, ttl=5)
         except Exception:
-            # If the worksheet doesn't exist, create it
+            existing_data = None
+        
+        if existing_data is None:
             conn.create(worksheet=sheet_name)
-            st.info(f"Created new worksheet '{sheet_name}'")
 
-        # Convert DataFrame to list of dictionaries
-        df_dict = df.to_dict(orient="records")
+     #   df_dict = df.to_dict(orient="records")
+     #   print("DataFrame convertido para dicionário:", df_dict)  
 
-        # Update the worksheet with the new data
-        conn.update(worksheet=sheet_name, data=df_dict)
+        conn.update(worksheet=sheet_name, data=df)
+        print("Dados atualizados na nova aba.")  
 
-        st.success(f"Data saved to worksheet '{sheet_name}' successfully.")
-    #except GSheetsConnectionError as e:
-     #   st.error(f"Connection error: {e}")
+        st.success(f"Dados salvos na aba '{sheet_name}' com sucesso.")
     except Exception as e:
-        st.error(f"Error saving data to worksheet '{sheet_name}': {e}")
+        st.error(f"Erro ao salvar dados na aba '{sheet_name}': {e}")
 st.sidebar.image("https://aborgesdoamaral.pt/wp-content/uploads/2021/04/marca-de-75-anos.png", use_column_width=True)  # 
 
 pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
