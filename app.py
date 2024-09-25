@@ -43,6 +43,25 @@ def save_to_new_sheet(df):
         st.success(f"Dados salvos na aba '{sheet_name}' com sucesso.")
     except Exception as e:
         st.error(f"Erro ao salvar dados na aba '{sheet_name}': {e}")
+
+
+
+def fill_empty_cells(data_frame):
+    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
+    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
+    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
+    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
+    
+    for index, row in data_frame.iterrows():
+        if pd.isnull(row['Entrada Manhã']):
+            data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
+        if pd.isnull(row['Saída Manhã']):
+            data_frame.at[index, 'Saída Manhã'] = default_exit_morning
+        if pd.isnull(row['Entrada Tarde']):
+            data_frame.at[index, 'Entrada Tarde'] = default_entry_afternoon
+        if pd.isnull(row['Saída Tarde']):
+            data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
+
 st.sidebar.image("https://aborgesdoamaral.pt/wp-content/uploads/2021/04/marca-de-75-anos.png", use_column_width=True)  # 
 
 pagina_selecionada = st.sidebar.radio("", ["✍🏽Marcação de Ponto", "🔍Consultas", "🔐Restrito"])
@@ -252,7 +271,9 @@ try:
         data_inicio = st.date_input("Data de Início")
         data_fim = st.date_input("Data de Fim")
 
+        
         filtered_data = existing_data_reservations.copy()
+        fill_empty_cells (filtered_data)
 
         if filtro_nome != "Todos":
             filtered_data = filtered_data[filtered_data["Name"] == filtro_nome]
