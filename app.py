@@ -18,58 +18,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-def fill_entry_morning(data_frame):
-    # Definir valor padrão para "Entrada Manhã"
-    default_entry_morning = pd.Timestamp.now().replace(hour=9, minute=0, second=0)
-    
-    for index, row in data_frame.iterrows():
-        # Verifica se "Entrada Manhã" está vazia/nula
-        if pd.isnull(row['Entrada Manhã']):
-            data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
-    
-    # Salvar DataFrame após preencher "Entrada Manhã"
-    save_dataframe(data_frame)
 
-def fill_exit_morning(data_frame):
-    # Definir valor padrão para "Saída Manhã"
-    default_exit_morning = pd.Timestamp.now().replace(hour=12, minute=30, second=0)
-    
-    for index, row in data_frame.iterrows():
-        # Verifica se "Saída Manhã" está vazia/nula
-        if pd.isnull(row['Saída Manhã']):
-            data_frame.at[index, 'Saída Manhã'] = default_exit_morning
-    
-    # Salvar DataFrame após preencher "Saída Manhã"
-    save_dataframe(data_frame)
 
-def fill_entry_afternoon(data_frame):
-    # Definir valor padrão para "Entrada Tarde"
-    default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
-    
-    for index, row in data_frame.iterrows():
-        # Verifica se "Entrada Tarde" está vazia/nula
-        if pd.isnull(row['Entrada Tarde']):
-            data_frame.at[index, 'Entrada Tarde'] = default_entry_afternoon
-    
-    # Salvar DataFrame após preencher "Entrada Tarde"
-    save_dataframe(data_frame)
-
-def fill_exit_afternoon(data_frame):
-    # Definir valor padrão para "Saída Tarde"
-    default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
-    
-    for index, row in data_frame.iterrows():
-        # Verifica se "Saída Tarde" está vazia/nula
-        if pd.isnull(row['Saída Tarde']):
-            data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
-    
-    # Salvar DataFrame após preencher "Saída Tarde"
-    save_dataframe(data_frame)
-
-def save_dataframe(data_frame):
-    # Salvar DataFrame (substitua pelo método de salvamento apropriado)
-    data_frame.to_csv('data_frame_atualizado.csv', index=False)  # Exemplo de salvamento para CSV
-    print("DataFrame salvo com sucesso!")
          
 
 conn = st.connection("gsheets", type=GSheetsConnection)
@@ -91,7 +41,7 @@ def save_to_new_sheet(df):
         df_dict = df.to_dict(orient="records")
         print("DataFrame convertido para dicionário:", df_dict)  
 
-        conn.update(worksheet=sheet_name, data=df)
+        conn.update(worksheet=sheet_name, data=df_dict)
         print("Dados atualizados na nova aba.")  
 
         st.success(f"Dados salvos na aba '{sheet_name}' com sucesso.")
