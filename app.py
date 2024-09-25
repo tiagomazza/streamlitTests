@@ -26,19 +26,21 @@ def fill_missing_data(data_frame):
     default_entry_afternoon = pd.Timestamp.now().replace(hour=14, minute=30, second=0)
     default_exit_afternoon = pd.Timestamp.now().replace(hour=18, minute=0, second=0)
     
-
+    # Iterando pelas linhas do DataFrame
     for index, row in data_frame.iterrows():
-        if pd.isnull(row['Entrada Manhã']):
-            data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
+        # Verifica os campos de "Manhã"
+        if pd.isnull(row['Entrada Manhã']) or pd.isnull(row['Saída Manhã']):
+            if pd.isnull(row['Entrada Manhã']):
+                data_frame.at[index, 'Entrada Manhã'] = default_entry_morning
+            if pd.isnull(row['Saída Manhã']):
+                data_frame.at[index, 'Saída Manhã'] = default_exit_morning
         
-        if pd.isnull(row['Saída Manhã']):
-            data_frame.at[index, 'Saída Manhã'] = default_exit_morning
-        
-        if pd.isnull(row['Entrada Tarde']):
-            data_frame.at[index, 'Entrada Tarde'] = default_entry_afternoon
-        
-        if pd.isnull(row['Saída Tarde']):
-            data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
+        # Verifica os campos de "Tarde"
+        if pd.isnull(row['Entrada Tarde']) or pd.isnull(row['Saída Tarde']):
+            if pd.isnull(row['Entrada Tarde']):
+                data_frame.at[index, 'Entrada Tarde'] = default_entry_afternoon
+            if pd.isnull(row['Saída Tarde']):
+                data_frame.at[index, 'Saída Tarde'] = default_exit_afternoon
          
 
 conn = st.connection("gsheets", type=GSheetsConnection)
