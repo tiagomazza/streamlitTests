@@ -24,7 +24,7 @@ def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
 
-def save_to_new_sheet(df):
+def fill_missing_data(df):
     try:
         try:
             existing_data = conn.read(worksheet=sheet_name, ttl=5)
@@ -279,7 +279,7 @@ try:
         df['Entrada Tarde'] = pd.to_datetime(df['Entrada Tarde'])
         df['Saída Tarde'] = pd.to_datetime(df['Saída Tarde'])
 
-        #fill_missing_data(df)
+        fill_missing_data(df)
 
         grouped_data = df.groupby(['Data', 'Nome']).agg({
             'Entrada Manhã': 'first',
