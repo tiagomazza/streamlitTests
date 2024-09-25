@@ -279,8 +279,6 @@ try:
         df['Entrada Tarde'] = pd.to_datetime(df['Entrada Tarde'])
         df['Saída Tarde'] = pd.to_datetime(df['Saída Tarde'])
 
-        fill_missing_data(df)
-
         grouped_data = df.groupby(['Data', 'Nome']).agg({
             'Entrada Manhã': 'first',
             'Saída Manhã': 'first',
