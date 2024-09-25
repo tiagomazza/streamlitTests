@@ -18,10 +18,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-
-         
-
 conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_existing_data(worksheet_name):
@@ -283,6 +279,7 @@ try:
         df['Entrada Tarde'] = pd.to_datetime(df['Entrada Tarde'])
         df['Saída Tarde'] = pd.to_datetime(df['Saída Tarde'])
 
+        save_to_new_sheet(df)
         fill_missing_data(df)
 
         grouped_data = df.groupby(['Data', 'Nome']).agg({
