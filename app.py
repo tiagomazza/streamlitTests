@@ -24,7 +24,7 @@ def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
 
-def fill_missing_data(df):
+def save_to_new_sheet(df):
     try:
         try:
             existing_data = conn.read(worksheet=sheet_name, ttl=5)
