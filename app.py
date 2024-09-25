@@ -42,31 +42,22 @@ def load_existing_data(worksheet_name):
     existing_data = conn.read(worksheet=worksheet_name, ttl=5)
     return existing_data.dropna(how="all")
 
-def save_to_new_sheet(df, sheet_name, conn):
+def save_to_new_sheet(df):
     try:
-        # Tentativa de leitura de dados existentes na aba
         try:
             existing_data = conn.read(worksheet=sheet_name, ttl=5)
         except Exception:
             existing_data = None
         
-        # Se não houver dados existentes, cria a aba
         if existing_data is None:
             conn.create(worksheet=sheet_name)
-            print(f"Aba '{sheet_name}' criada com sucesso.")
-        
-        # Convertendo o DataFrame em um dicionário
+
         df_dict = df.to_dict(orient="records")
         print("DataFrame convertido para dicionário:", df_dict)  
 
-        # Verifica se a aba já tem dados para escolher entre inserir ou atualizar
-        if existing_data is None or len(existing_data) == 0:
-            conn.insert(worksheet=sheet_name, data=df_dict)
-            print("Dados inseridos na nova aba.")
-        else:
-            conn.update(worksheet=sheet_name, data=df_dict)
-            print("Dados atualizados na aba existente.")
-        
+        conn.update(worksheet=sheet_name, data=df)
+        print("Dados atualizados na nova aba.")  
+
         st.success(f"Dados salvos na aba '{sheet_name}' com sucesso.")
     except Exception as e:
         st.error(f"Erro ao salvar dados na aba '{sheet_name}': {e}")
